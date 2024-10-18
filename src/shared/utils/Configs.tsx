@@ -1,6 +1,4 @@
-import {provide} from "inversify-binding-decorators";
+import { provide } from "inversify-binding-decorators";
 
 @provide(Configs)
-export class Configs {
-
-}
+export class Configs {}
