@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { BoxProps } from "@mui/system";
 
-const ErrorBox = styled(Paper)<PaperProps>(({ theme }) => ({
+const ErrorBox = styled(Paper)<PaperProps>(({}) => ({
   maxWidth: 500,
   minHeight: 400,
   margin: "auto",
@@ -19,7 +19,7 @@ const ErrorBox = styled(Paper)<PaperProps>(({ theme }) => ({
   justifyContent: "center",
 }));
 
-const ErrorContent = styled(Box)<BoxProps>(({ theme }) => ({
+const ErrorContent = styled(Box)<BoxProps>(({}) => ({
   margin: "auto",
   display: "flex",
   flexDirection: "column",
