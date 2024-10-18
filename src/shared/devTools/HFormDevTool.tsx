@@ -1,13 +1,10 @@
-'use client'
+"use client";
 
-import {useFormContext} from "react-hook-form";
-import {DevTool} from "@hookform/devtools";
+import { useFormContext } from "react-hook-form";
+import { DevTool } from "@hookform/devtools";
 
 export const HFormDevTool = () => {
-    const form = useFormContext();
+  const form = useFormContext();
 
-
-    return (
-        <DevTool control={form.control}/>
-    )
-}
+  return <DevTool control={form.control} />;
+};

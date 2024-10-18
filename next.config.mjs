@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    experimental: {
-        instrumentationHook: true,
-    },
+  experimental: {
+    instrumentationHook: true,
+  },
 };
 export default nextConfig;

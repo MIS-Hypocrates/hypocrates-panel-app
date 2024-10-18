@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
-import {AppRouterCacheProvider} from "@mui/material-nextjs/v13-appRouter";
-import { ThemeProvider} from "@mui/system";
-import {AppTheme} from "@/_app/AppTheme";
-import {HAppBar} from "@/shared/components/HAppBar";
-import {Api} from "@/shared/Api";
-import {IClinicInformation} from "@/Interfaces";
-import {HPage} from "@/shared/components/HPage";
-import {container} from "@/_app/AppContainer";
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
+import { ThemeProvider } from "@mui/system";
+import { AppTheme } from "@/_app/AppTheme";
+import { HAppBar } from "@/shared/components/HAppBar";
+import { Api } from "@/shared/Api";
+import { IClinicInformation } from "@/Interfaces";
+import { HPage } from "@/shared/components/HPage";
+import { container } from "@/_app/AppContainer";
 import ClientLocalizationProvider from "@/_app/DatePickerProvider";
 
 export const metadata: Metadata = {
@@ -25,28 +25,25 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-    const api = container.get<Api>(Api)
-    const clinicInformation = await api.get<IClinicInformation>("clinicInformation")
-    const clinicName = clinicInformation?.clinicName
+  const api = container.get<Api>(Api);
+  const clinicInformation =
+    await api.get<IClinicInformation>("clinicInformation");
+  const clinicName = clinicInformation?.clinicName;
 
-    let title = "Гипократ";
+  let title = "Гипократ";
 
-    if (!!clinicName) {
-        title += ` | ${clinicName}`
-    }
+  if (!!clinicName) {
+    title += ` | ${clinicName}`;
+  }
 
   return (
     <html lang="en">
-      <body
-        className={`antialiased`}
-      >
+      <body className={`antialiased`}>
         <AppRouterCacheProvider>
           <ThemeProvider theme={AppTheme}>
             <ClientLocalizationProvider>
-              <HAppBar title={title}/>
-                <HPage>
-                    {children}
-                </HPage>
+              <HAppBar title={title} />
+              <HPage>{children}</HPage>
             </ClientLocalizationProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>
