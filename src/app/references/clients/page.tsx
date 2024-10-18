@@ -45,7 +45,7 @@ export default async function Page() {
             <Stack spacing={2} direction="row">
               <Link href={"/references/clients/new"}>
                 <Button startIcon={<PlusIcon />} variant="contained">
-                  Добавить <н></н>ового
+                  Добавить нового
                 </Button>
               </Link>
             </Stack>
