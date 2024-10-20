@@ -6,20 +6,22 @@ import { PropsWithChildren } from "react";
 import { HFormDevTool } from "@/shared/devTools/HFormDevTool";
 
 interface HEntityFormProps<T extends object> extends PropsWithChildren {
-  currentValue: DefaultValues<T>;
-  onSave: (form: string) => void;
+  defaultValue?: DefaultValues<T>;
+  onSuccess: (form: string) => Promise<void>;
 }
 
 export const HEntityForm = <T extends object>({
-  onSave,
-  currentValue,
+  onSuccess,
+  defaultValue,
   children,
 }: HEntityFormProps<T>) => {
   return (
     <Paper sx={{ width: "100%", overflow: "hidden", p: 3 }}>
       <FormContainer
-        defaultValues={currentValue}
-        onSuccess={(form: T) => onSave(JSON.stringify(form))}
+        defaultValues={defaultValue}
+        onSuccess={async (form: T) => {
+          await onSuccess(JSON.stringify(form));
+        }}
       >
         <Stack spacing={2} direction="column" sx={{ marginTop: 2 }}>
           {children}

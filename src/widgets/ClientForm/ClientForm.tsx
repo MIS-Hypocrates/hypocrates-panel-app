@@ -2,11 +2,8 @@
 
 import Grid from "@mui/material/Grid2";
 import { Stack, Typography } from "@mui/material";
-import { container } from "@/_app/AppContainer";
-import { Api } from "@/shared/Api";
 import { HEntityForm } from "@/shared/components/HEntityForm";
 import { IPatient } from "@/Interfaces";
-import { FunctionUtils } from "@/shared/utils/FunctionUtils";
 import {
   CheckboxElement,
   SelectElement,
@@ -14,42 +11,36 @@ import {
 } from "react-hook-form-mui";
 import { DatePickerElement } from "react-hook-form-mui/date-pickers";
 import { HAccordion } from "@/shared/components/HAccordion";
-import PhotoUploadForm from "@/widgets/PhotoUpload/PhotoUploadForm";
+import AvatarLoader from "@/feature/AvatarLoader/AvatarLoader";
+import { FileLoader } from "@/feature/FileLoader/FileLoader";
 
-export default async function CreateClient({ id }) {
-  const functionUtils = container.get<FunctionUtils>(FunctionUtils);
-  const api = container.get<Api>(Api);
+interface ClientFormProps {
+  data?: IPatient;
+  onSave: (value: string) => Promise<void>;
+  title: string;
+}
 
-  let model: Partial<IPatient> = {};
-
-  if (!!id) {
-    functionUtils.runIfNoFalse<IPatient>(
-      await api.get<IPatient>(`clients/${id}`),
-      (value) => {
-        model = value;
-      },
-    );
-  }
-
-  const onSave = async (form: string) => {
-    "use server";
-    await api.post("clinics/endpoint", form);
-  };
-
-  const title = !!id ? `Клиент ${id}` : `Новый клиент`;
-
+export default async function ClientForm({
+  data,
+  onSave,
+  title,
+}: ClientFormProps) {
   return (
     <Grid component="main" sx={{ p: 3 }} spacing={3}>
       <Stack spacing={2}>
         <Grid size={"grow"}>
           <Typography variant="h5">{title}</Typography>
         </Grid>
-        <HEntityForm onSave={onSave} currentValue={model}>
-          <PhotoUploadForm name={"avatar"} />
-          <TextFieldElement name="surname" label="Фамилия" required />
-          <TextFieldElement name="firsname" label="Имя" required />
-          <TextFieldElement name="patronymic" label="Отчество" />
-          <DatePickerElement name={"birthday"} label={"Дата рождения"} />
+        <HEntityForm onSuccess={onSave} defaultValue={data}>
+          <FileLoader Component={AvatarLoader} name={"avatar"} size={180} />
+          <TextFieldElement name="surname" label="Фамилия" required fullWidth />
+          <TextFieldElement name="firsname" label="Имя" required fullWidth />
+          <TextFieldElement name="patronymic" label="Отчество" fullWidth />
+          <DatePickerElement
+            name={"birthday"}
+            label={"Дата рождения"}
+            sx={{ width: "100%" }}
+          />
           <SelectElement
             name="sex"
             label={"Пол"}

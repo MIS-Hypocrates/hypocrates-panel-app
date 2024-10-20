@@ -221,4 +221,28 @@ export class Api {
     }
     return null;
   }
+
+  async update<T, TT>(endpoint: string, payload: T): Promise<TT | null> {
+    const url = new URL(endpoint, "https://api.clinics.com");
+    for (const key in payload) {
+      url.searchParams.append(key, payload[key]);
+    }
+
+    console.log(url.toString());
+
+    return new Promise((resolve) =>
+      setTimeout(resolve, 300, mock[url.toString()] as T),
+    );
+
+    try {
+      const data = await fetch(url, { method: "POST" });
+
+      if (data.ok) {
+        return data.json() as T;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    return null;
+  }
 }

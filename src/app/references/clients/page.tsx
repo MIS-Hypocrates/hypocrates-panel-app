@@ -43,7 +43,7 @@ export default async function Page() {
         <Grid size={{ xs: "grow", lg: "auto" }}>
           <Stack spacing={2}>
             <Stack spacing={2} direction="row">
-              <Link href={"/references/clients/new"}>
+              <Link href={"/references/client/"}>
                 <Button startIcon={<PlusIcon />} variant="contained">
                   Добавить нового
                 </Button>

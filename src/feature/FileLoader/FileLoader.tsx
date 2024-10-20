@@ -1,16 +1,12 @@
 "use server";
 
-import { HFileUpload } from "@/shared/components/HFileUpload";
 import { container } from "@/_app/AppContainer";
 import { FileBucket } from "@/shared/utils/FileBucket";
+import { FC } from "react";
 
-interface FileLoaderProps {
-  multiple?: boolean;
-  onChange?: (value: string[]) => void;
-  disabled?: boolean;
-}
-
-export async function FileLoader(props: FileLoaderProps) {
+export async function FileLoader<
+  TProps extends { upload: (form: FormData) => Promise<string> },
+>({ Component, ...props }: { Component: FC<TProps> } & Omit<TProps, "upload">) {
   const upload = async (forms: FormData) => {
     "use server";
     const fileBucket = container.get<FileBucket>(FileBucket);
@@ -25,5 +21,5 @@ export async function FileLoader(props: FileLoaderProps) {
     return JSON.stringify(await Promise.all(uploadPromise));
   };
 
-  return <HFileUpload onUpload={upload} {...props} />;
+  return <Component upload={upload} {...props} />;
 }

@@ -1,20 +1,14 @@
 "use client";
 
-import { Button, CircularProgress, styled } from "@mui/material";
-import {
-  LegacyRef,
-  PropsWithChildren,
-  useCallback,
-  useRef,
-  useState,
-} from "react";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { Avatar, IconButton, styled } from "@mui/material";
+import { LegacyRef, useCallback, useRef, useState } from "react";
 
-interface HFileUploadProps extends PropsWithChildren {
-  multiple?: boolean;
-  onChange?: (value: string[]) => void;
+interface HAvatarUploadProps {
+  onChange?: (value: string) => void;
   onUpload: (value: FormData) => Promise<string>;
   disabled?: boolean;
+  initValue?: string;
+  size?: number;
 }
 
 const VisuallyHiddenInput = styled("input")({
@@ -29,14 +23,15 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-export const HFileUpload = ({
-  children,
-  multiple,
+export const HAvatarUpload = ({
   onUpload,
   onChange,
   disabled,
-}: HFileUploadProps) => {
+  initValue,
+  size = 54,
+}: HAvatarUploadProps) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [value, setValue] = useState(initValue);
   const ref = useRef<LegacyRef<HTMLInputElement>>();
 
   const upload = useCallback(
@@ -48,14 +43,17 @@ export const HFileUpload = ({
 
         const formData = new FormData();
 
-        for (let i = 0; i < files.length; i++)
-          formData.append(files[i].name, files[i]);
+        formData.append(files[0].name, files[0]);
 
         const response = await onUpload(formData);
 
         const uri = JSON.parse(response)?.at(0);
 
         if (onChange) onChange(uri);
+
+        console.log({ uri });
+
+        setValue(uri);
       } catch (e) {
         console.error(e);
       }
@@ -65,24 +63,22 @@ export const HFileUpload = ({
   );
 
   return (
-    <Button
-      component="label"
-      role={undefined}
-      variant="contained"
+    <IconButton
+      component={"label"}
       tabIndex={-1}
-      startIcon={isLoading ? <CircularProgress /> : <CloudUploadIcon />}
       disabled={isLoading || disabled}
+      sx={{ width: size, height: size }}
     >
-      {children}
+      <Avatar src={value} sx={{ width: size, height: size }} />
       <VisuallyHiddenInput
         ref={(elementRef) => {
           if (!elementRef) ref.current = elementRef;
         }}
         type={"file"}
-        multiple={multiple}
+        accept="image/png, image/jpeg"
         disabled={isLoading || disabled}
         onChange={(e) => upload(e.target.files)}
       />
-    </Button>
+    </IconButton>
   );
 };

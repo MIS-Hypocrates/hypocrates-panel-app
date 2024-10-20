@@ -9,16 +9,6 @@ interface TableReferencesProps<T extends IModel> {
   columns: HTableColumns<T>[];
 }
 
-const handleChangeRowsPerPage = async (perPage: number) => {
-  "use server";
-  cookies().set("PEER_PAGE", `${perPage}`);
-};
-
-const handleChangePage = async (page: number, endpoint) => {
-  "use server";
-  cookies().set(`${endpoint}_PAGE`, `${page}`);
-};
-
 export async function TableReferences<T extends IModel>({
   endpoint,
   columns,
@@ -30,12 +20,22 @@ export async function TableReferences<T extends IModel>({
   const api = container.get<Api>(Api);
 
   const filterData = JSON.parse(filter);
-  console.log(filterData);
+
   const pageData = await api.get<ITablePage<T>>(endpoint, {
     peerPage,
     page,
     ...filterData,
   });
+
+  const handleChangeRowsPerPage = async (perPage: number) => {
+    "use server";
+    cookies().set("PEER_PAGE", `${perPage}`);
+  };
+
+  const handleChangePage = async (page: number) => {
+    "use server";
+    cookies().set(`${endpoint}_PAGE`, `${page}`);
+  };
 
   if (!pageData) {
     throw new Error(
@@ -51,7 +51,7 @@ export async function TableReferences<T extends IModel>({
       data={pageData.data}
       countData={pageData.countData}
       handleChangeRowsPerPage={handleChangeRowsPerPage}
-      handleChangePage={(value) => handleChangePage(value, endpoint)}
+      handleChangePage={handleChangePage}
     />
   );
 }
